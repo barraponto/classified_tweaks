@@ -1,0 +1,5 @@
+name = Classified tweaks
+description = Tweaks for Classified Ads
+dependencies[] = classified
+package = Classified
+core = 7.x

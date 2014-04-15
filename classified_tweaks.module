@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * @file classified_tweaks.module
+ * TODO: Enter file description here.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function classified_tweaks_form_alter(&$form, &$form_state, $form_id) {
+}
