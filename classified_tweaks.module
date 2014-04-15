@@ -22,8 +22,10 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
   if ($user->uid != 1 && !empty($form['#node']->nid)) {
     $form['expires_fs']['expire_mode']['#type'] = 'value';
     $form['expires_fs']['expire_mode']['#value'] = 'node';
-    if (empty($form['#node']->status)) {
+    if ($form['#node']->status == 0) {
       $form['expires_fs']['expire_mode']['#value'] = 'reset';
+    $form['expires_fs']['#description'] .= '<br />';
+    $form['expires_fs']['#description'] .= t('The expiration time will be reset when this ad is saved.');
     }
   }
 }
