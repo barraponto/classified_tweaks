@@ -27,3 +27,13 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
     }
   }
 }
+
+/**
+ * Implements hook_node_presave().
+ */
+function classified_tweaks_node_presave($node) {
+  if (!empty($node->original) && $node->original->status == 0) {
+    // When an ad is recovered from the grace period, it bumps its timestamp.
+    $node->created = $node->changed;
+  }
+}
