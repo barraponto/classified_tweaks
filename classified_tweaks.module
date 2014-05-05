@@ -29,8 +29,6 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
     $form['expire_message']['#markup'] .= '<p>' . t('Click "Keep Unpublished" to hold on to the ad without posting it again.') .'</p>';
     $form['expire_message']['#markup'] .= '<p>' . t('Click "Delete" to permanently delete this ad.') .'</p>';
   }
-  // Display this information instead of collapsing by default.
-  $form['expires_fs']['#collapsed'] = FALSE;
 }
 
 /**
