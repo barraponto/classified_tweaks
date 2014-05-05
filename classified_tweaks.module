@@ -9,17 +9,6 @@
  * Implements hook_form_FORM_ID_alter().
  */
 function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state) {
-  // If there's only one option, display it as a message.
-  if (count($form['expires_fs']['expire_mode']['#options']) == 1) {
-    $option = $form['expires_fs']['expire_mode']['#options'];
-    $form['expires_fs']['expire_mode']['#type'] = 'value';
-    $form['expires_fs']['expire_mode']['#value'] = key($option);
-    $form['expires_fs']['#description'] = current($option);
-    if (key($option) == 'reset') {
-      $expires = variable_get('classified-lifetimes', array('undefined'));
-      $form['expires_fs']['#description'] = t('This ad will expire in @expire days.', array('@expire' => $expires[0]));
-    }
-  }
   // On edit forms, don't give the user the option to reset its ad expire date.
   // Of course, administrators do as they please.
   global $user;
@@ -32,6 +21,13 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
       $form['expires_fs']['#description'] .= '<br />';
       $form['expires_fs']['#description'] .= t('The expiration time will be reset when this ad is saved.');
     }
+    else {
+      unset($form['expires_fs']['#type']);
+    }
+  } else {
+    unset($form['expires_fs']['#type']);
+    $form['expires_fs']['expire_mode']['#type'] = 'value';
+    $form['expires_fs']['expire_mode']['#value'] = 'node';
   }
   // Display this information instead of collapsing by default.
   $form['expires_fs']['#collapsed'] = FALSE;
