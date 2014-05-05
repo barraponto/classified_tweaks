@@ -11,23 +11,23 @@
 function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state) {
   // On edit forms, don't give the user the option to reset its ad expire date.
   // Of course, administrators do as they please.
+  $form['expires_fs']['expire_mode']['#type'] = 'value';
+  $form['expires_fs']['expire_mode']['#value'] = 'node';
+  unset($form['expires_fs']['#type']);
+
+  // If editing an expired ad, let the user reset the expiration date.
   global $user;
-  if ($user->uid != 1 && !empty($form['#node']->nid)) {
-    $form['expires_fs']['expire_mode']['#type'] = 'value';
-    $form['expires_fs']['expire_mode']['#value'] = 'node';
-    if ($form['#node']->status == 0) {
-      $form['expires_fs']['expire_mode']['#value'] = 'reset';
-      // Inform the user about expiration time resetting.
-      $form['expires_fs']['#description'] .= '<br />';
-      $form['expires_fs']['#description'] .= t('The expiration time will be reset when this ad is saved.');
-    }
-    else {
-      unset($form['expires_fs']['#type']);
-    }
-  } else {
-    unset($form['expires_fs']['#type']);
-    $form['expires_fs']['expire_mode']['#type'] = 'value';
-    $form['expires_fs']['expire_mode']['#value'] = 'node';
+  if ($user->uid != 1 && !empty($form['#node']->nid) && $form['#node']->status == 0) {
+    $form['expires_fs']['expire_mode']['#value'] = 'reset';
+    // Inform the user about expiration time resetting.
+    $form['expire_message'] = array(
+      '#type' => 'item',
+      '#weight' => $form['title']['#weight'] + 0.001,
+    );
+    $form['expire_message']['#markup'] = '<span>' . t('Sorry, this ad has expired.') .'</span>';
+    $form['expire_message']['#markup'] .= '<p>' . t('Click "Renew" to post the ad again') .'</p>';
+    $form['expire_message']['#markup'] .= '<p>' . t('Click "Keep Unpublished" to hold on to the ad without posting it again.') .'</p>';
+    $form['expire_message']['#markup'] .= '<p>' . t('Click "Delete" to permanently delete this ad.') .'</p>';
   }
   // Display this information instead of collapsing by default.
   $form['expires_fs']['#collapsed'] = FALSE;
