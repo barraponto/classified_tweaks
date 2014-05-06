@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * Actually sets up the buttons for classified tweaks.
+ */
+function classified_tweaks_setup_buttons() {
+  variable_set('publish_button_content_type_classified', TRUE);
+  user_role_grant_permissions(
+    DRUPAL_AUTHENTICATED_RID,
+    array(
+      'publish button unpublish own classified',
+    )
+);
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function classified_tweaks_update_7100(&$sandbox = NULL) {
+  $ret = t('Buttons updated for classified tweaks.');
+
+  classified_tweaks_setup_buttons();
+
+  return $ret;
+}
+
+/**
+ * Implements hook_enable().
+ */
+function classified_tweaks_enable() {
+  classified_tweaks_setup_buttons();
+}

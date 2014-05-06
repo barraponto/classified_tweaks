@@ -29,6 +29,18 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
     $form['expire_message']['#markup'] .= '<p>' . t('Click "Keep Unpublished" to hold on to the ad without posting it again.') .'</p>';
     $form['expire_message']['#markup'] .= '<p>' . t('Click "Delete" to permanently delete this ad.') .'</p>';
   }
+  $cancel = (!empty($form['#node']->nid) && $form['#node']->status == 0) ? t('Keep Unpublished') : t('Cancel');
+  $form['actions']['cancel'] = array(
+    '#value' => $cancel,
+    '#weight' => $form['actions']['submit']['#weight'] + 0.001,
+    '#type' => 'submit',
+    '#limit_validation_errors' => array(),
+    '#submit' => array('classified_tweaks_node_form_cancel'),
+  );
+}
+
+function classified_tweaks_node_form_cancel($form, &$form_state) {
+  drupal_goto('classified');
 }
 
 /**

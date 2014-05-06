@@ -1,5 +1,6 @@
 name = Classified tweaks
 description = Tweaks for Classified Ads
 dependencies[] = classified
+dependencies[] = publish_button
 package = Classified
 core = 7.x
