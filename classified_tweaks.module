@@ -28,23 +28,23 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
       '#type' => 'item',
       '#weight' => $form['title']['#weight'] + 0.001,
     );
-    $message = $form['#node']->status ?
+    $message = $form['#node']->status || REQUEST_TIME > $form['#node']->expires ?
       t('This ad will expire in @time.',
         array('@time' => format_interval($form['#node']->expires - REQUEST_TIME, 2))) :
       t('Expired');
     $form['expire_message']['#markup'] = '<p>' . $message .'</p>';
-    if ($form['#node']->status) {
-      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Save" to keep your edits.') .'</p>';
-      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Cancel" to go back to the ads list.') .'</p>';
-      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Unpublish" to hide your ad. It will be kept in the database until it expires.') .'</p>';
-    } else {
-      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Renew" to post the ad again') .'</p>';
-      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Keep Unpublished" to hold on to the ad without posting it again.') .'</p>';
-      $form['expire_message']['#markup'] .= '<p>' . t('This ad has expired or you unpublished it.') . '</p>';
-      $form['expire_message']['#markup'] .= '<p>' . t('If the ad expired you may renew it by clicking "Renew." If you unpublished it then "Renew" will not work until the ad has completely expired. Clicking "Renew" in any case will save any changes you wish to make.') . '</p>';
-      $form['actions']['submit']['#value'] = t('Renew');
+
+    if (!$form['#node']->status) {
+      if ($form['#node']->expires > REQUEST_TIME) {
+        $form['expire_message']['#markup'] .= '<p>' . t('This ad has been unpublished.') . '</p>';
+        $form['expire_message']['#markup'] .= '<p>' . t('Click "Publish" to post the ad again.') . '</p>';
+        $form['actions']['submit']['#value'] = t('Publish');
+      } else {
+        $form['expire_message']['#markup'] .= '<p>' . t('This ad has expired.') . '</p>';
+        $form['expire_message']['#markup'] .= '<p>' . t('Click "Renew" to post the ad again.') . '</p>';
+        $form['actions']['submit']['#value'] = t('Renew');
+      }
     }
-    // $form['expire_message']['#markup'] .= '<p>' . t('Click "Delete" to permanently delete this ad.') .'</p>';
   }
 
   // Add cancel button.
@@ -66,8 +66,14 @@ function classified_tweaks_node_form_cancel($form, &$form_state) {
  * Implements hook_node_presave().
  */
 function classified_tweaks_node_presave($node) {
-  if (!empty($node->original) && $node->original->status == 0 && $node->expires < REQUEST_TIME) {
-    // When an ad is recovered from the grace period, it bumps its timestamp.
-    $node->created = $node->changed;
+  if ($node->type == 'classified' && !empty($node->original) && $node->original->status == 0) {
+    // Clicking save on unpublished nodes always publish them,
+    // else the user should click the "Keep Unpublished" button.
+    $node->status = 1;
+
+    if ($node->expires < REQUEST_TIME) {
+      // When an ad is expired, it bumps its timestamp.
+      $node->created = $node->changed;
+    }
   }
 }
