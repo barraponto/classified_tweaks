@@ -29,20 +29,22 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
       '#weight' => $form['title']['#weight'] + 0.001,
     );
     $message = $form['#node']->status ?
-      t('This ad will expire on @time.',
+      t('This ad will expire in @time.',
         array('@time' => format_interval($form['#node']->expires - REQUEST_TIME, 2))) :
-      t('Sorry, this ad has expired.');
-    $form['expire_message']['#markup'] = '<span>' . $message .'</span>';
+      t('Expired');
+    $form['expire_message']['#markup'] = '<p>' . $message .'</p>';
     if ($form['#node']->status) {
-      $form['expire_message']['#markup'] .= '<p>' . t('Click "Save" to keep your edits.') .'</p>';
-      $form['expire_message']['#markup'] .= '<p>' . t('Click "Cancel" to go back to the ads list.') .'</p>';
-      $form['expire_message']['#markup'] .= '<p>' . t('Click "Unpublish" to hide your ad. It will be kept in the database until it expires.') .'</p>';
+      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Save" to keep your edits.') .'</p>';
+      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Cancel" to go back to the ads list.') .'</p>';
+      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Unpublish" to hide your ad. It will be kept in the database until it expires.') .'</p>';
     } else {
-      $form['expire_message']['#markup'] .= '<p>' . t('Click "Renew" to post the ad again') .'</p>';
-      $form['expire_message']['#markup'] .= '<p>' . t('Click "Keep Unpublished" to hold on to the ad without posting it again.') .'</p>';
+      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Renew" to post the ad again') .'</p>';
+      // $form['expire_message']['#markup'] .= '<p>' . t('Click "Keep Unpublished" to hold on to the ad without posting it again.') .'</p>';
+      $form['expire_message']['#markup'] .= '<p>' . t('This ad has expired or you unpublished it.') . '</p>';
+      $form['expire_message']['#markup'] .= '<p>' . t('If the ad expired you may renew it by clicking "Renew." If you unpublished it then "Renew" will not work until the ad has completely expired. Clicking "Renew" in any case will save any changes you wish to make.') . '</p>';
       $form['actions']['submit']['#value'] = t('Renew');
     }
-    $form['expire_message']['#markup'] .= '<p>' . t('Click "Delete" to permanently delete this ad.') .'</p>';
+    // $form['expire_message']['#markup'] .= '<p>' . t('Click "Delete" to permanently delete this ad.') .'</p>';
   }
 
   // Add cancel button.
