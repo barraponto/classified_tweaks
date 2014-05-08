@@ -40,9 +40,9 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
     } else {
       $form['expire_message']['#markup'] .= '<p>' . t('Click "Renew" to post the ad again') .'</p>';
       $form['expire_message']['#markup'] .= '<p>' . t('Click "Keep Unpublished" to hold on to the ad without posting it again.') .'</p>';
+      $form['actions']['submit']['#value'] = t('Renew');
     }
     $form['expire_message']['#markup'] .= '<p>' . t('Click "Delete" to permanently delete this ad.') .'</p>';
-    $form['actions']['submit']['#value'] = t('Renew');
   }
 
   // Add cancel button.
