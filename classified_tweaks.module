@@ -71,7 +71,7 @@ function classified_tweaks_node_presave($node) {
     // else the user should click the "Keep Unpublished" button.
     $node->status = 1;
 
-    if ($node->expires < REQUEST_TIME) {
+    if ($node->original->expires < REQUEST_TIME) {
       // When an ad is expired, it bumps its timestamp.
       $node->created = $node->changed;
     }
