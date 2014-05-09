@@ -31,13 +31,13 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
     $message = $form['#node']->status || REQUEST_TIME < $form['#node']->expires ?
       t('This ad will expire in @time.',
         array('@time' => format_interval($form['#node']->expires - REQUEST_TIME, 2))) :
-      t('Expired');
+      t('- Expired -');
     $form['expire_message']['#markup'] = '<p>' . $message .'</p>';
 
     if (!$form['#node']->status) {
       if ($form['#node']->expires > REQUEST_TIME) {
-        $form['expire_message']['#markup'] .= '<p>' . t('This ad has been unpublished.') . '</p>';
-        $form['expire_message']['#markup'] .= '<p>' . t('Click "Publish" to post the ad again.') . '</p>';
+        $form['expire_message']['#markup'] .= '<p>' . t('You have unpublished this ad.') . '</p>';
+        $form['expire_message']['#markup'] .= '<p>' . t('Click "Publish" if you wish to post the ad again.') . '</p>';
         $form['actions']['submit']['#value'] = t('Publish');
       } else {
         $form['expire_message']['#markup'] .= '<p>' . t('This ad has expired.') . '</p>';
