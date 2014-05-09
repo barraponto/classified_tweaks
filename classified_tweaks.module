@@ -19,6 +19,8 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
   }
 
   if (!empty($form['#node']->nid)) {
+    // If it's already published, don't change the category anymore.
+    $form['classified_category']['#disabled'] = TRUE;
     // If node is not expired, don't reset its expire date.
     if ($user->uid != 1 && $form['#node']->status) {
       $form['expires_fs']['expire_mode']['#value'] = 'node';
