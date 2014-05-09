@@ -28,7 +28,7 @@ function classified_tweaks_form_classified_node_form_alter(&$form, &$form_state)
       '#type' => 'item',
       '#weight' => $form['title']['#weight'] + 0.001,
     );
-    $message = $form['#node']->status || REQUEST_TIME > $form['#node']->expires ?
+    $message = $form['#node']->status || REQUEST_TIME < $form['#node']->expires ?
       t('This ad will expire in @time.',
         array('@time' => format_interval($form['#node']->expires - REQUEST_TIME, 2))) :
       t('Expired');
