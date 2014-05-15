@@ -27,6 +27,12 @@ some of the options and adding some extra features.
 
 See https://drupal.org/comment/8375163 for more background.
 
+Installation
+------------
+
+Classified Tweaks depends on [Publish Button][5]. It will be automatically
+configured when Classified Tweaks is installed.
+
 Known Issues
 ------------
 
@@ -45,3 +51,4 @@ Idea and sponsorship by [System Lord Mark][3].
 [2]: https://drupal.org/user/511760
 [3]: https://drupal.org/user/2734905
 [4]: https://drupal.org/project/content_approval
+[5]: https://drupal.org/project/publish_button
