@@ -6,11 +6,17 @@
  */
 
 /**
+ * Returns the classified content types;
+ */
+function classified_tweaks_classified_types() {
+  return array('classified', 'dealer', 'jobs', 'realtor');
+}
+
+/**
  * Checks whether the content type is a classified content type.
  */
 function classified_tweaks_is_classified($type) {
-  $classified_types = array('classified', 'dealer', 'jobs', 'realtor');
-  return in_array($type, $classified_types);
+  return in_array($type, classified_tweaks_classified_types());
 }
 
 /**

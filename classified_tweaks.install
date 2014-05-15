@@ -4,13 +4,17 @@
  * Actually sets up the buttons for classified tweaks.
  */
 function classified_tweaks_setup_buttons() {
-  variable_set('publish_button_content_type_classified', TRUE);
-  user_role_grant_permissions(
-    DRUPAL_AUTHENTICATED_RID,
-    array(
-      'publish button unpublish own classified',
-    )
-);
+  // Required for hook_upodate_N.
+  drupal_load('module', 'classified_tweaks');
+  foreach (classified_tweaks_classified_types() as $content_type) {
+    variable_set('publish_button_content_type_' . $content_type, TRUE);
+    user_role_grant_permissions(
+      DRUPAL_AUTHENTICATED_RID,
+      array(
+        'publish button unpublish own ' . $content_type,
+      )
+    );
+  }
 }
 
 /**
@@ -18,6 +22,17 @@ function classified_tweaks_setup_buttons() {
  */
 function classified_tweaks_update_7100(&$sandbox = NULL) {
   $ret = t('Buttons updated for classified tweaks.');
+
+  classified_tweaks_setup_buttons();
+
+  return $ret;
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function classified_tweaks_update_7101(&$sandbox = NULL) {
+  $ret = t('Permissions updated for multiple classified content types.');
 
   classified_tweaks_setup_buttons();
 
