@@ -9,7 +9,7 @@
  * Returns the classified content types;
  */
 function classified_tweaks_classified_types() {
-  return array('classified', 'dealer', 'jobs', 'realtor');
+  return array('classified', 'dealer', 'jobs', 'realtor', 'bizads');
 }
 
 /**
@@ -36,6 +36,11 @@ function classified_tweaks_form_alter(&$form, &$form_state, $form_id) {
     if (!empty($form['#node']->nid)) {
       // If it's already published, don't change the category anymore.
       $form['classified_category']['#disabled'] = TRUE;
+      $form['jobs_category']['#disabled'] = TRUE;
+      $form['dealer_category']['#disabled'] = TRUE;
+      $form['realtor_category']['#disabled'] = TRUE;
+      $form['bizads_category']['#disabled'] = TRUE;
+
       // If node is not expired, don't reset its expire date.
       if ($user->uid != 1 && $form['#node']->status) {
         $form['expires_fs']['expire_mode']['#value'] = 'node';
